@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sam Tylman | Portfolio</title>
+
+    <style>
+        /* =========================
+           GENERAL PAGE STYLING
+        ========================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f2f2f2;
+            color: #000;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* =========================
+           ANIMATED OUTLINED TEXT
+        ========================= */
+        h1, h2, h3, .subtitle, .contact-title {
+            font-family: Bahnschrift, "Arial Narrow", Arial, sans-serif;
+            color: #00fff7;
+            -webkit-text-stroke: 2px #000;
+            paint-order: stroke fill;
+            animation: textBreathing 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes textBreathing {
+            0% { color: #00fff7; }
+            100% { color: #00ff89; }
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+        .header {
+            position: relative;
+            min-height: 175px;
+            padding: 35px 4.5%;
+        }
+
+        .name-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+
+            /* Moves resume approximately 1.5 inches farther right */
+            gap: 100px;
+        }
+
+        .name {
+            font-size: clamp(48px, 8vw, 88px);
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .resume-link {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: clamp(16px, 1.7vw, 21px);
+            color: blue;
+            text-decoration: underline;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .resume-link:hover {
+            color: #ff00aa;
+            transform: translateY(-2px);
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            font-size: clamp(22px, 4vw, 42px);
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .intro {
+            margin-top: 14px;
+            font-size: clamp(22px, 3.5vw, 38px);
+        }
+
+        /* =========================
+           CONTACT INFO
+        ========================= */
+        .contact {
+            position: absolute;
+            top: 42px;
+            right: 5%;
+            text-align: right;
+        }
+
+        .contact-title {
+            margin-bottom: 15px;
+            font-size: clamp(24px, 4vw, 40px);
+            font-weight: 400;
+        }
+
+        .contact-icons {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .contact-icons a {
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        .contact-icons img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+
+        .contact-icons a:hover {
+            transform: scale(1.2);
+        }
+
+        /* =========================
+           PROJECTS SECTION
+        ========================= */
+        .projects-section {
+            width: 100%;
+            margin-top: 190px;
+            padding: 10px 4% 20px;
+        }
+
+        /* Heading and scroll controls share one horizontal row. */
+        .projects-toolbar {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            align-items: center;
+            width: 100%;
+            min-height: 100px;
+            margin-bottom: 8px;
+        }
+
+        .projects-heading {
+            /* Place Projects in the left column */
+            grid-column: 1;
+            justify-self: center;
+            align-self: center;
+
+            font-size: clamp(42px, 6vw, 65px);
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .scroll-controls {
+            /* Place controls in the right column */
+            grid-column: 3;
+            justify-self: center;
+            align-self: center;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: min(100%, 420px);
+        }
+
+        .scroll-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: Bahnschrift, "Arial Narrow", Arial, sans-serif;
+            font-size: 18px;
+            color: #000;
+        }
+
+        .scroll-arrow {
+            font-size: 22px;
+            color: #000;
+        }
+
+        .project-scrollbar {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 14px;
+            border-radius: 20px;
+            background: #fff;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .project-scrollbar::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 32%;
+            height: 14px;
+            border-radius: 20px;
+            background: #888;
+            border: 2px solid #fff;
+            cursor: grab;
+        }
+
+        .project-scrollbar::-webkit-slider-thumb:active {
+            cursor: grabbing;
+            background: #555;
+        }
+
+        .project-scrollbar::-moz-range-thumb {
+            width: 32%;
+            height: 10px;
+            border: none;
+            border-radius: 20px;
+            background: #888;
+            cursor: grab;
+        }
+
+        /* =========================
+           PROJECT CARDS
+        ========================= */
+        .projects-container {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            /* Extra space prevents cards being cut off at either end */
+            padding: 40px clamp(35px, 8vw, 120px) 50px;
+
+            /* Original slider/scroll behavior is unchanged */
+            scroll-behavior: smooth;
+            scroll-snap-type: none;
+
+            scrollbar-width: none;
+        }
+
+        .projects-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .project-card {
+            flex: 0 0 350px;
+            height: 235px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px;
+            border-radius: 42px;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            text-decoration: none;
+            scroll-snap-align: none;
+            position: relative;
+            transform-origin: center;
+            transition:
+                transform 0.3s ease,
+                background-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            /* Smaller hover scale helps prevent edge clipping */
+            transform: scale(1.03);
+            background: rgba(0, 0, 0, 0.55);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            z-index: 5;
+        }
+
+        .project-title {
+            font-size: 29px;
+            font-weight: 500;
+            -webkit-text-stroke: 2px #000;
+        }
+
+        .project-logo {
+            width: 82px;
+            height: 82px;
+            object-fit: contain;
+        }
+
+        .project-description {
+            font-size: 16px;
+            font-weight: 400;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* =========================
+           ABOUT ME
+        ========================= */
+        .about-section {
+            padding: 55px 6% 100px;
+        }
+
+        .about-heading {
+            margin-bottom: 20px;
+            font-size: clamp(40px, 6vw, 58px);
+            font-weight: 400;
+        }
+
+        .about-content {
+            padding-left: 25px;
+
+            /* Reduced size of skills, picture text, and other content */
+            font-size: clamp(16px, 2.2vw, 26px);
+
+            line-height: 1.5;
+        }
+
+        /* =========================
+           RESPONSIVE DESIGN
+        ========================= */
+        @media (max-width: 750px) {
+            .header {
+                padding-top: 25px;
+            }
+
+            .projects-section {
+                margin-top: 145px;
+            }
+
+            .name-row {
+                /* Keep resume spacing reasonable on smaller screens */
+                gap: 16px;
+            }
+
+            .contact {
+                position: static;
+                margin-top: 25px;
+                text-align: left;
+            }
+
+            .contact-icons {
+                justify-content: flex-start;
+            }
+
+            .projects-toolbar {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                min-height: 90px;
+            }
+
+            .projects-heading {
+                grid-column: 1;
+                font-size: clamp(38px, 7vw, 52px);
+            }
+
+            .scroll-controls {
+                grid-column: 2;
+                width: 100%;
+                margin-right: 0;
+            }
+
+            .project-card {
+                flex-basis: 320px;
+                height: 220px;
+            }
+
+            .projects-container {
+                gap: 25px;
+                padding-left: 35px;
+                padding-right: 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .projects-section {
+                margin-top: 105px;
+            }
+
+            .name-row {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .resume-link {
+                margin-top: 0;
+            }
+
+            .projects-toolbar {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px 1%;
+            }
+
+            .projects-heading {
+                grid-column: 1;
+                justify-self: start;
+            }
+
+            .scroll-controls {
+                grid-column: 1;
+                justify-self: start;
+                align-items: flex-start;
+                width: min(100%, 320px);
+            }
+
+            .scroll-indicator {
+                font-size: 15px;
+            }
+
+            .project-scrollbar {
+                width: 100%;
+            }
+
+            .project-card {
+                flex-basis: 290px;
+                height: 210px;
+            }
+
+            .projects-container {
+                gap: 20px;
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* Make project cards extend to the edges of the screen */
+        .projects-section {
+            padding-left: 5;
+            padding-right: 5;
+        }
+
+        /* Keep the heading and scroll controls aligned with the page */
+        .projects-toolbar {
+            padding-left: 4%;
+            padding-right: 4%;
+        }
+
+        /* Let the project cards use the full screen width */
+        .projects-container {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            padding-left: 1in;
+            padding-right: 1in;
+        }
+        
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+
+        <div class="name-row">
+            <h1 class="name">Sam Tylman</h1>
+            <a class="resume-link" href="resume.pdf" target="_blank" rel="noopener noreferrer">resume</a>
+        </div>
+
+        <p class="subtitle">
+            Software Developer &amp; Game Developer
+        </p>
+
+        <p class="intro">
+            short intro...
+        </p>
+
+
+        <!-- CONTACT INFO -->
+
+        <div class="contact">
+
+            <p class="contact-title">
+                contact info
+            </p>
+
+            <div class="contact-icons">
+
+                <a href="https://www.linkedin.com/in/YOUR-USERNAME/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="LinkedIn">
+
+                    <img src="images/linkedin.png"
+                         alt="LinkedIn">
+
+                </a>
+
+
+                <a href="mailto:YOUR-EMAIL@example.com"
+                   aria-label="Email">
+
+                    <img src="images/email.png"
+                         alt="Email">
+
+                </a>
+
+
+                <a href="https://github.com/YOUR-USERNAME"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="GitHub">
+
+                    <img src="images/github.png"
+                         alt="GitHub">
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         PROJECTS
+    ========================== -->
+
+    <section class="projects-section" id="projects">
+
+        <div class="projects-toolbar">
+            <h2 class="projects-heading">Projects</h2>
+
+            <div class="scroll-controls">
+                <div class="scroll-indicator">
+                    <span>Scroll to explore</span>
+                    <span class="scroll-arrow">→</span>
+                </div>
+
+                <input
+                    type="range"
+                    class="project-scrollbar"
+                    id="projectScrollbar"
+                    min="0"
+                    max="1000"
+                    value="0"
+                    step="1"
+                    aria-label="Scroll through projects"
+                >
+            </div>
+        </div>
+
+        <!-- PROJECT CARDS -->
+
+        <div class="projects-container" id="projectsContainer">
+
+
+            <!-- PROJECT 1 -->
+
+            <a href="project1.html"
+               class="project-card">
+
+                <h3 class="project-title">
+                    Project 1
+                </h3>
+
+                <img class="project-logo"
+                     src="images/project1.png"
+                     alt="Project 1 logo">
+
+                <p class="project-description">
+                    brief description
+                </p>
+
+            </a>
+
+
+
+            <!-- PROJECT 2 -->
+
+            <a href="project2.html"
+               class="project-card">
+
+                <h3 class="project-title">
+                    Project 2
+                </h3>
+
+                <img class="project-logo"
+                     src="images/project2.png"
+                     alt="Project 2 logo">
+
+                <p class="project-description">
+                    brief description
+                </p>
+
+            </a>
+
+
+
+            <!-- PROJECT 3 -->
+
+            <a href="project3.html"
+               class="project-card">
+
+                <h3 class="project-title">
+                    Project 3
+                </h3>
+
+                <img class="project-logo"
+                     src="images/project3.png"
+                     alt="Project 3 logo">
+
+                <p class="project-description">
+                    brief description
+                </p>
+
+            </a>
+
+
+
+            <!-- PROJECT 4 -->
+
+            <a href="project4.html"
+               class="project-card">
+
+                <h3 class="project-title">
+                    Project 4
+                </h3>
+
+                <img class="project-logo"
+                     src="images/project4.png"
+                     alt="Project 4 logo">
+
+                <p class="project-description">
+                    brief description
+                </p>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         ABOUT ME
+    ========================== -->
+
+    <section class="about-section" id="about">
+
+        <h2 class="about-heading">
+            About me
+        </h2>
+
+        <div class="about-content">
+
+            skills, picture, etc...
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         PROJECT SCROLLBAR JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        const projectContainer =
+            document.getElementById("projectsContainer");
+
+        const projectScrollbar =
+            document.getElementById("projectScrollbar");
+
+
+        // Update slider when the project section scrolls.
+
+        function updateScrollbar() {
+
+            const maxScroll =
+                projectContainer.scrollWidth -
+                projectContainer.clientWidth;
+
+            if (maxScroll <= 0) {
+                projectScrollbar.value = 0;
+                return;
+            }
+
+            projectScrollbar.value =
+                (projectContainer.scrollLeft / maxScroll) * 1000;
+
+        }
+
+
+        // Move project cards when the slider is dragged.
+
+        projectScrollbar.addEventListener("input", function () {
+
+            const maxScroll =
+                projectContainer.scrollWidth -
+                projectContainer.clientWidth;
+
+            projectContainer.scrollLeft =
+                (this.value / 1000) * maxScroll;
+
+        });
+
+
+        // Keep slider synchronized with touch and mouse scrolling.
+
+        projectContainer.addEventListener(
+            "scroll",
+            updateScrollbar
+        );
+
+
+        // Recalculate if the browser window changes size.
+
+        window.addEventListener(
+            "resize",
+            updateScrollbar
+        );
+
+
+        // Set initial scrollbar position.
+
+        window.addEventListener("load", updateScrollbar);
+
+    </script>
+
+
+</body>
+</html>
